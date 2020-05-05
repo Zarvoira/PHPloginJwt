@@ -8,6 +8,7 @@
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 -- poll
+-- this is a message
 -- sdrsdfsdf dsfsdfs
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;

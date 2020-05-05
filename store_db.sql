@@ -7,7 +7,7 @@
 -- Generation Time: Dec 09, 2019 at 12:24 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
-
+-- poll
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;

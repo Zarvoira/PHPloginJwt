@@ -1,0 +1,8 @@
+/* Webpage Layout */
+https://colorlib.com/wp/template/shoppers/
+
+/* Progress Bar */
+https://www.cssscript.com/responsive-step-progress-indicator-with-pure-css/
+
+/* jQuery, JavaScript & Database */
+https://www.youtube.com/watch?v=DVO99vc1YRM

@@ -1,0 +1,72 @@
+// Pre-defined variables
+$transition: background-color 0.3s;
+$margin_for_display_centre: 0 auto;
+
+$input_hover_background_color: lavender;
+$input_hover_transition: $transition;
+$heading_margin: 0 auto 1em;
+$form_width: 25em;
+$wrapper_margin: $margin_for_display_centre;
+
+
+// @Mixin
+@mixin button-position($margin, $padding: 0.6em 2em) 
+{
+    margin: $margin;
+    padding: $padding;
+}
+
+
+// @Extend
+%placeholder_style
+{
+    color: #8d92a082;
+    font-style: italic;
+}
+
+
+// Form styles
+#login_container, #sign_up_container
+{
+    width: fit-content;
+    
+    #login_wrapper, #sign_up_wrapper
+    {
+        margin: $wrapper_margin;
+    }
+}
+
+#login_heading, #sign_up_heading
+{
+    margin: $heading_margin;
+}
+
+#login_form, #sign_up_form
+{
+    width: $form_width;
+    
+    input
+    {
+        transition: $input_hover_transition;
+    }
+    
+    input:hover, input:focus
+    {
+        background-color: $input_hover_background_color;
+    }
+    
+    input::placeholder
+    {
+        @extend %placeholder_style;
+    }
+    
+    #login_button
+    {
+        @include button-position(1em 6.5em);
+    }
+    
+    #sign_up_button
+    {
+        @include button-position(1em 6.67em);
+    }
+}

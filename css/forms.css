@@ -1,0 +1,26 @@
+#login_form input::placeholder, #sign_up_form input::placeholder {
+  color: #8d92a082;
+  font-style: italic; }
+
+#login_container, #sign_up_container {
+  width: fit-content; }
+  #login_container #login_wrapper, #login_container #sign_up_wrapper, #sign_up_container #login_wrapper, #sign_up_container #sign_up_wrapper {
+    margin: 0 auto; }
+
+#login_heading, #sign_up_heading {
+  margin: 0 auto 1em; }
+
+#login_form, #sign_up_form {
+  width: 25em; }
+  #login_form input, #sign_up_form input {
+    transition: background-color 0.3s; }
+  #login_form input:hover, #login_form input:focus, #sign_up_form input:hover, #sign_up_form input:focus {
+    background-color: lavender; }
+  #login_form #login_button, #sign_up_form #login_button {
+    margin: 1em 6.5em;
+    padding: 0.6em 2em; }
+  #login_form #sign_up_button, #sign_up_form #sign_up_button {
+    margin: 1em 6.67em;
+    padding: 0.6em 2em; }
+
+/*# sourceMappingURL=forms.css.map */

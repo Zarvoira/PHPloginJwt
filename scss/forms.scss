@@ -2,7 +2,7 @@
 $transition: background-color 0.3s;
 $margin_for_display_centre: 0 auto;
 
-$input_hover_background_color: lavender;
+$input_hover_background_color: #e8f0fe;
 $input_hover_transition: $transition;
 $heading_margin: 0 auto 1em;
 $form_width: 25em;
@@ -28,11 +28,17 @@ $wrapper_margin: $margin_for_display_centre;
 // Form styles
 #login_container, #sign_up_container
 {
-    width: fit-content;
+    width: 36%;
     
     #login_wrapper, #sign_up_wrapper
     {
         margin: $wrapper_margin;
+        
+        .row
+        {
+            display: flex;
+            flex-direction: column;
+        }
     }
 }
 
@@ -62,11 +68,11 @@ $wrapper_margin: $margin_for_display_centre;
     
     #login_button
     {
-        @include button-position(1em 6.5em);
+        @include button-position(1em 7.9em);
     }
     
     #sign_up_button
     {
-        @include button-position(1em 6.67em);
+        @include button-position(1em 7.3em);
     }
 }

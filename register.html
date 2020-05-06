@@ -22,7 +22,6 @@
         <script>
             $(document).ready(function () {
 
-
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
                     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -73,20 +72,17 @@
                     $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
 
                     })
-                            // show login page on error will be here
-                            // show login page on error
-                            .done(function (result) {
+                    // show login page on error will be here
+                    // show login page on error
+                    .done(function (result) {
 
-                                window.location = "shop.php";
+                        window.location = "shop.php";
 
-                            });
+                    });
                 }
 
                 redirectIfTokenValid();
                 clearResponse();
-
-                // trigger when registration form is submitted here
-
 
                 // clearResponse() will be here COMMON
                 function clearResponse() {
@@ -101,8 +97,10 @@
                     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 }
 
- $(document).on('submit', '#sign_up_form', function () {
-
+                // trigger when registration form is submitted
+                $(document).on('submit', '#sign_up_form', function () {
+                    if (isFormValid())
+                    {
                     // get form data
                     var sign_up_form = $(this);
                     var form_data = JSON.stringify(sign_up_form.serializeObject());
@@ -125,15 +123,47 @@
                     });
 
                     return false;
-                });
-
-
-
-
+                }});
 
             });
 
         </script>
+        
+        <script>
+        let formHasNoErrors = true;
+
+        function isPasswordValid()
+        {
+            document.getElementById("response").innerHTML = "";
+
+            let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
+
+            // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
+            if (pattern.test(document.getElementById("password").value) === false)
+            {
+                document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function isFormValid()
+        {
+            let passwordIsValid = isPasswordValid();
+
+            if (passwordIsValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        </script>
+        
+    </head>
 
     <body>
 
@@ -197,10 +227,10 @@
                         <div class="col-md-9 order-2" id="sign_up_wrapper">
 
                             <div class="row">
+                                <h2 id="sign_up_heading">Sign Up</h2>
                                 <div id="response"></div>
-
-            <h2 id="sign_up_heading">Sign Up</h2>
-            <form id='sign_up_form'>
+                
+            <form id='sign_up_form' onsubmit="return isFormValid()">
                 <div class="form-group">
                     <label for="firstname">First Name</label>
                     <input type="text" class="form-control" name="firstname" id="firstname" placeholder='Enter first name' required />

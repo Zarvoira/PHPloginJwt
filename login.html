@@ -22,13 +22,13 @@
         <script>
             $(document).ready(function () {
 
-
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
                     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
                     var expires = "expires=" + d.toUTCString();
                     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 }
+                
                 // get or read cookie COMMON
                 function getCookie(cname) {
                     var name = cname + "=";
@@ -65,7 +65,6 @@
                     return o;
                 };
 
-                //common
                 function redirectIfTokenValid()
                 {
                     // validate jwt to verify access
@@ -76,17 +75,12 @@
                             // show login page on error will be here
                             // show login page on error
                             .done(function (result) {
-
                                 window.location = "shop.php";
-
                             });
                 }
 
                 redirectIfTokenValid();
                 clearResponse();
-
-                // trigger when registration form is submitted here
-
 
                 // clearResponse() will be here COMMON
                 function clearResponse() {
@@ -101,23 +95,8 @@
                     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 }
 
-
-
-//common
-                function showLoggedInMenu() {
-                    // hide login and sign up from navbar & show logout button
-                    $("#login, #sign_up").hide();
-                    $("#logout").show();
-                }
-//common
-                function showLoggedOutMenu() {
-                    // show login and sign up from navbar & hide logout button COMMON
-                    $("#login, #sign_up").show();
-                    $("#logout").hide();
-                }
-
+                // trigger when login form is submitted
                 $(document).on('submit', '#login_form', function () {
-
                     // get form data
                     var login_form = $(this);
                     var form_data = JSON.stringify(login_form.serializeObject());
@@ -148,13 +127,13 @@
                     return false;
                 });
 
-
                 // remove jwt
                 setCookie("jwt", "", 1);
-
             });
 
         </script>
+        
+    </head>
 
     <body>
 
@@ -218,11 +197,12 @@
                         <div class="col-md-9 order-2" id="login_wrapper">
 
                             <div class="row">
-                                <div id="response"></div>
-
-
+                                
                                 <h2 id="login_heading">Login</h2>
-                                <form id='login_form'>
+                                
+                                <div id="response"></div>
+                            
+                                <form id='login_form' autocomplete = "on">
                                     <div class='form-group'>
                                         <label for='email'>Email Address</label>
                                         <input type='email' class='form-control' id='email' name='email' placeholder='Enter email' required>

@@ -3,9 +3,12 @@
   font-style: italic; }
 
 #login_container, #sign_up_container {
-  width: fit-content; }
+  width: 36%; }
   #login_container #login_wrapper, #login_container #sign_up_wrapper, #sign_up_container #login_wrapper, #sign_up_container #sign_up_wrapper {
     margin: 0 auto; }
+    #login_container #login_wrapper .row, #login_container #sign_up_wrapper .row, #sign_up_container #login_wrapper .row, #sign_up_container #sign_up_wrapper .row {
+      display: flex;
+      flex-direction: column; }
 
 #login_heading, #sign_up_heading {
   margin: 0 auto 1em; }
@@ -15,12 +18,12 @@
   #login_form input, #sign_up_form input {
     transition: background-color 0.3s; }
   #login_form input:hover, #login_form input:focus, #sign_up_form input:hover, #sign_up_form input:focus {
-    background-color: lavender; }
+    background-color: #e8f0fe; }
   #login_form #login_button, #sign_up_form #login_button {
-    margin: 1em 6.5em;
+    margin: 1em 7.9em;
     padding: 0.6em 2em; }
   #login_form #sign_up_button, #sign_up_form #sign_up_button {
-    margin: 1em 6.67em;
+    margin: 1em 7.3em;
     padding: 0.6em 2em; }
 
 /*# sourceMappingURL=forms.css.map */

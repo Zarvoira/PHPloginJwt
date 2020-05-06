@@ -26,11 +26,11 @@ $wrapper_margin: $margin_for_display_centre;
 
 
 // Form styles
-#login_container, #sign_up_container
+#login_container, #sign_up_container, #update_account_container
 {
     width: 36%;
     
-    #login_wrapper, #sign_up_wrapper
+    #login_wrapper, #sign_up_wrapper, #update_account_wrapper
     {
         margin: $wrapper_margin;
         
@@ -42,12 +42,12 @@ $wrapper_margin: $margin_for_display_centre;
     }
 }
 
-#login_heading, #sign_up_heading
+#login_heading, #sign_up_heading, #update_account_heading
 {
     margin: $heading_margin;
 }
 
-#login_form, #sign_up_form
+#login_form, #sign_up_form, #update_account_form
 {
     width: $form_width;
     
@@ -74,5 +74,10 @@ $wrapper_margin: $margin_for_display_centre;
     #sign_up_button
     {
         @include button-position(1em 7.3em);
+    }
+    
+    #update_account_button
+    {
+        @include button-position(1em 5.3em);
     }
 }

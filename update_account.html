@@ -88,16 +88,15 @@
 
                         clearResponse();
                     })
-
+                    
                     // error message when jwt is invalid will be here
                     // on error/fail, tell the user he needs to login to show the account page
                     .fail(function (result) {
                         $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
                     });
                 }
-                showUpdateAccountForm();
             
-            // trigger when 'update account' form is submitted
+                // trigger when 'update account' form is submitted
                 $(document).on('submit', '#update_account_form', function () {
                     // handle for update_account_form
                     var update_account_form = $(this);
@@ -144,6 +143,40 @@
                     return false;
                 });
 
+        </script>
+        
+        <script>
+        let formHasNoErrors = true;
+
+        function isPasswordValid()
+        {
+            document.getElementById("response").innerHTML = "";
+
+            let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
+
+            // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
+            if (pattern.test(document.getElementById("password").value) === false)
+            {
+                document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function isFormValid()
+        {
+            let passwordIsValid = isPasswordValid();
+
+            if (passwordIsValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         </script>
         
     </head>
@@ -206,25 +239,25 @@
             </div>
 
             <div class="site-section">
-                <div class="container" id="login_container">
+                <div class="container" id="update_account_container">
 
                     <div class="row mb-5">
-                        <div class="col-md-9 order-2" id="login_wrapper">
+                        <div class="col-md-9 order-2" id="update_account_wrapper">
 
                             <div class="row">
                                 
-                                <h2 id="login_heading">Update Account</h2>
+                                <h2 id="update_account_heading">Update Account</h2>
                                 
                                 <div id="response"></div>
                                 
-                                <form id='update_account_form'>
+                                <form id='update_account_form' onsubmit="return isFormValid()">
                                     <div class="form-group">
-                                        <label for="firstname">Firstname</label>
+                                        <label for="firstname">First Name</label>
                                         <input type="text" class="form-control" name="firstname" id="firstname" required value="" />
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="lastname">Lastname</label>
+                                        <label for="lastname">Last Name</label>
                                         <input type="text" class="form-control" name="lastname" id="lastname" required value="" />
                                     </div>
 
@@ -238,7 +271,7 @@
                                         <input type="password" class="form-control" name="password" id="password" />
                                     </div>
 
-                                    <button type='submit' class='btn btn-primary'>
+                                    <button id="update_account_button" type='submit' class='btn btn-primary'>
                                         Save Changes
                                     </button>
                                 </form>

@@ -21,6 +21,30 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function () {
+
+                showUpdateAccountForm();
+                
+                function redirectIfTokenInvalid()
+                {
+                    // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
+
+                    })
+                    // show login page on error
+                    .fail(function (result) {
+                        window.location = "shop.php";
+                    });
+                }
+
+                redirectIfTokenInvalid();
+                clearResponse();
+
+                // clearResponse() will be here COMMON
+                function clearResponse() {
+                    $('#response').html('');
+                }
+                
                 // function to set cookie COMMON
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
@@ -47,6 +71,24 @@
                     return "";
                 }
 
+                // function to make form values to json format  COMMON
+                $.fn.serializeObject = function () {
+
+                    var o = {};
+                    var a = this.serializeArray();
+                    $.each(a, function () {
+                        if (o[this.name] !== undefined) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                    return o;
+                };
+
                 // if the user is logged in
                 function showLoggedInMenu() {
                     // hide login and sign up from navbar & show logout button
@@ -68,35 +110,29 @@
                             .fail(function (result) {
                                 showLoggedOutMenu();
                             });
-                    }
-                    showMenu();
+                }
+                showMenu();
 
-                    // logout the user
-                    $(document).on('click', '#logout', function(){
-                     setCookie("jwt", "", 1);
-                    });
+                // logout the user
+                $(document).on('click', '#logout', function () {
+                    setCookie("jwt", "", 1);
                 });
-            
+
+
                 function showUpdateAccountForm() {
-                // validate jwt to verify access
-                var jwt = getCookie('jwt');
-                $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
+                    // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
 
-                    // html form for updating user account will be here
-                    // if response is valid, put user details in the form
-                    $('#firstname').val(result.data.firstname);
-
+                        // if response is valid, put user details in the form
+                        $('#firstname').val(result.data.firstname);
+                        $('#lastname').val(result.data.lastname);
+                        $('#email').val(result.data.email);
                         clearResponse();
                     })
-                    
-                    // error message when jwt is invalid will be here
-                    // on error/fail, tell the user he needs to login to show the account page
-                    .fail(function (result) {
-                        $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
-                    });
                 }
-            
-                // trigger when 'update account' form is submitted
+
+
                 $(document).on('submit', '#update_account_form', function () {
                     // handle for update_account_form
                     var update_account_form = $(this);
@@ -114,7 +150,6 @@
                     // convert object to json string
                     var form_data = JSON.stringify(update_account_form_obj);
 
-                    // submit form data to api
                     $.ajax({
                         url: "api/update_user.php",
                         type: "POST",
@@ -122,11 +157,10 @@
                         data: form_data,
                         success: function (result) {
 
-                            // tell the user account was updated
                             $('#response').html("<div class='alert alert-success'>Account was updated.</div>");
-
                             // store new jwt to coookie
                             setCookie("jwt", result.jwt, 1);
+                            window.location = "shop.php";
                         },
                         // show error message to user
                         error: function (xhr, resp, text) {
@@ -137,48 +171,48 @@
                                 $('#response').html("<div class='alert alert-success'>Access denied. Please login</div>");
                             }
                         }
-                        // errors will be handled here
+
                     });
 
                     return false;
                 });
 
+            });
         </script>
-        
+
         <script>
-        let formHasNoErrors = true;
+            let formHasNoErrors = true;
 
-        function isPasswordValid()
-        {
-            document.getElementById("response").innerHTML = "";
-
-            let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
-
-            // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
-            if (pattern.test(document.getElementById("password").value) === false)
+            function isPasswordValid()
             {
-                document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
-                return false;
-            }
-            
-            return true;
-        }
-        
-        function isFormValid()
-        {
-            let passwordIsValid = isPasswordValid();
+                document.getElementById("response").innerHTML = "";
 
-            if (passwordIsValid)
-            {
+                let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
+
+                // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
+                if (pattern.test(document.getElementById("password").value) === false)
+                {
+                    document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
+                    return false;
+                }
+
                 return true;
             }
-            else
+
+            function isFormValid()
             {
-                return false;
+                let passwordIsValid = isPasswordValid();
+
+                if (passwordIsValid)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
             }
-        }
         </script>
-        
+
     </head>
 
     <body>
@@ -245,11 +279,11 @@
                         <div class="col-md-9 order-2" id="update_account_wrapper">
 
                             <div class="row">
-                                
+
                                 <h2 id="update_account_heading">Update Account</h2>
-                                
+
                                 <div id="response"></div>
-                                
+
                                 <form id='update_account_form' onsubmit="return isFormValid()">
                                     <div class="form-group">
                                         <label for="firstname">First Name</label>

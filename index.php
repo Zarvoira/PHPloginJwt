@@ -16,9 +16,71 @@
 
 
         <link rel="stylesheet" href="css/aos.css">
-
         <link rel="stylesheet" href="css/style.css">
+        
+        <script src="js/jquery2.js"></script>
+        <script src="main.js" type="text/javascript"></script>
 
+        <script>
+                $(document).ready(function () {
+                // function to set cookie COMMON
+                function setCookie(cname, cvalue, exdays) {
+                    var d = new Date();
+                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                    var expires = "expires=" + d.toUTCString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                }
+
+                // get or read cookie COMMON
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var decodedCookie = decodeURIComponent(document.cookie);
+                    var ca = decodedCookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1);
+                        }
+
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length, c.length);
+                        }
+                    }
+                    return "";
+                }
+
+                // if the user is logged in
+                function showLoggedInMenu() {
+                    // hide login and sign up from navbar & show logout button
+                    $("#login, #register").hide();
+                    $("#logout, #update_account").show();
+                }
+
+                // if the user is logged out
+                function showLoggedOutMenu() {
+                    $("#login, #register").show();
+                    $("#logout, #update_account").hide();
+                }
+
+                function showMenu() {   // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
+                        showLoggedInMenu();
+                    })
+                    .fail(function (result) {
+                        showLoggedOutMenu();
+                    });
+                }
+                showMenu();
+                
+                // logout the user
+                $(document).on('click', '#logout', function(){
+                 setCookie("jwt", "", 1);
+                });
+            });
+            
+        </script>
+        
     </head>
     <body>
 
@@ -60,6 +122,10 @@
                         <ul class="site-menu js-clone-nav d-none d-md-block">
                             <li><a href="index.php">Home</a></li>
                             <li><a href="shop.php">Shop</a></li>
+                            <li id='register'><a href="register.html" >Register</a></li>
+                            <li id = 'login'><a href="login.html" >Login</a></li>
+                            <li id ='update_account'><a href="update_account.html" >Update Account</a></li>
+                            <li id ='logout'><a href="index.php" >Logout</a></li>
                         </ul>
                     </div>
                 </nav>

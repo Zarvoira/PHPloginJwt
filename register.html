@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="css/owl.theme.default.min.css">
         <link rel="stylesheet" href="css/aos.css">
         <link rel="stylesheet" href="css/style.css">
+        <link href="css/forms.css" rel="stylesheet" type="text/css"/>
         <script src="js/jquery2.js"></script>
         <script src="main.js" type="text/javascript"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -20,7 +21,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function () {
-
+                
+                
+           
 
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
@@ -72,20 +75,15 @@
                     $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
 
                     })
-                            // show login page on error will be here
-                            // show login page on error
-                            .done(function (result) {
-
-                                window.location = "shop.php";
-
-                            });
+                    // show login page on error will be here
+                    // show login page on error
+                    .done(function (result) {
+                        window.location = "shop.php";
+                    });
                 }
 
                 redirectIfTokenValid();
                 clearResponse();
-
-                // trigger when registration form is submitted here
-
 
                 // clearResponse() will be here COMMON
                 function clearResponse() {
@@ -100,8 +98,10 @@
                     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 }
 
- $(document).on('submit', '#sign_up_form', function () {
-
+                // trigger when registration form is submitted
+                $(document).on('submit', '#sign_up_form', function () {
+                    if (isFormValid())
+                    {
                     // get form data
                     var sign_up_form = $(this);
                     var form_data = JSON.stringify(sign_up_form.serializeObject());
@@ -124,15 +124,47 @@
                     });
 
                     return false;
-                });
-
-
-
-
+                }});
 
             });
 
         </script>
+        
+        <script>
+        let formHasNoErrors = true;
+
+        function isPasswordValid()
+        {
+            document.getElementById("response").innerHTML = "";
+
+            let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
+
+            // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
+            if (pattern.test(document.getElementById("password").value) === false)
+            {
+                document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function isFormValid()
+        {
+            let passwordIsValid = isPasswordValid();
+
+            if (passwordIsValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        </script>
+        
+    </head>
 
     <body>
 
@@ -190,37 +222,37 @@
             </div>
 
             <div class="site-section">
-                <div class="container">
+                <div class="container" id="sign_up_container">
 
                     <div class="row mb-5">
-                        <div class="col-md-9 order-2">
+                        <div class="col-md-9 order-2" id="sign_up_wrapper">
 
                             <div class="row">
+                                <h2 id="sign_up_heading">Sign Up</h2>
                                 <div id="response"></div>
-
- <h2>Sign Up</h2>
-            <form id='sign_up_form'>
+                
+            <form id='sign_up_form' onsubmit="return isFormValid()">
                 <div class="form-group">
-                    <label for="firstname">Firstname</label>
-                    <input type="text" class="form-control" name="firstname" id="firstname" required />
+                    <label for="firstname">First Name</label>
+                    <input type="text" class="form-control" name="firstname" id="firstname" placeholder='Enter first name' required />
                 </div>
  
                 <div class="form-group">
-                    <label for="lastname">Lastname</label>
-                    <input type="text" class="form-control" name="lastname" id="lastname" required />
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control" name="lastname" id="lastname" placeholder='Enter last name' required />
                 </div>
  
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required />
+                    <input type="email" class="form-control" name="email" id="email" placeholder='Enter email' required />
                 </div>
  
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required />
+                    <input type="password" class="form-control" name="password" id="password" placeholder='Enter password' required />
                 </div>
  
-                <button type='submit' class='btn btn-primary'>Sign Up</button>
+                <button id="sign_up_button" type='submit' class='btn btn-primary'>Sign Up</button>
             </form>
            
  

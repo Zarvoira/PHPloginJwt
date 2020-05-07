@@ -25,7 +25,7 @@
 
         <script src="main.js" type="text/javascript"></script>
         <script>
-            $(document).ready(function () {
+                $(document).ready(function () {
                         // function to set cookie COMMON
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
@@ -52,21 +52,20 @@
                     return "";
                 }
 
+                // if the user is logged in
                 function showLoggedInMenu() {
                     // hide login and sign up from navbar & show logout button
-            
-                    $("#login, #sign_up,#register").hide();
+                    $("#login, #register").hide();
+                    $("#logout, #update_account").show();
                 }
-//common
+
+                // if the user is logged out
                 function showLoggedOutMenu() {
-                  
-                    $("#hide,#logout").hide();
-                   
+                    $("#login, #register").show();
+                    $("#logout, #update_account").hide();
                 }
 
                 function showMenu() {   // validate jwt to verify access
-
-
                     var jwt = getCookie('jwt');
                     $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
                         showLoggedInMenu();
@@ -78,18 +77,12 @@
                 }
                 showMenu();
                 
+                // logout the user
                 $(document).on('click', '#logout', function(){
                  setCookie("jwt", "", 1);
- 
-});
- 
-
-
+                });
             });
             
-            
-            
-
         </script>
 
     </head>
@@ -134,8 +127,9 @@
                             <li><a href="index.php">Home</a></li>
                             <li><a href="shop.php">Shop</a></li>
                             <li id='register'><a href="register.html" >Register</a></li>
-                            <li id ='logout'><a href="shop.php" >Logout</a></li>
                             <li id = 'login'><a href="login.html" >Login</a></li>
+                            <li id ='update_account'><a href="update_account.html" >Update Account</a></li>
+                            <li id ='logout'><a href="index.php" >Logout</a></li>
                         </ul>
                     </div>
                 </nav>

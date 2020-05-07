@@ -1,6 +1,4 @@
-// agung
-// jasmine
--- phpMyAdmin SQL Dump testing jnijnoinolnjliliknkj bkjbnuj
+-- phpMyAdmin SQL Dump
 -- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
@@ -8,8 +6,6 @@
 -- Generation Time: Dec 09, 2019 at 12:24 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
---jooker
-
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;

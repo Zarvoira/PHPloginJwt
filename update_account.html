@@ -22,13 +22,30 @@
         <script>
             $(document).ready(function () {
 
+                showUpdateAccountForm();
+                function redirectIfTokenInvalid()
+                {
+                    // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
+
+                    })
+                            // show login page on error will be here
+                            // show login page on error
+                            .fail(function (result) {
+                                window.location = "shop.php";
+                            });
+                }
+
+                redirectIfTokenInvalid();
+                // function to set cookie COMMON
                 function setCookie(cname, cvalue, exdays) {
                     var d = new Date();
                     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
                     var expires = "expires=" + d.toUTCString();
                     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 }
-                
+
                 // get or read cookie COMMON
                 function getCookie(cname) {
                     var name = cname + "=";
@@ -46,6 +63,7 @@
                     }
                     return "";
                 }
+
 
                 // function to make form values to json format  COMMON
                 $.fn.serializeObject = function () {
@@ -65,73 +83,143 @@
                     return o;
                 };
 
-                function redirectIfTokenValid()
-                {
+                // if the user is logged in
+                function showLoggedInMenu() {
+                    // hide login and sign up from navbar & show logout button
+                    $("#login, #register").hide();
+                    $("#logout, #update_account").show();
+                }
+
+                // if the user is logged out
+                function showLoggedOutMenu() {
+                    $("#login, #register").show();
+                    $("#logout, #update_account").hide();
+                }
+
+                function showMenu() {   // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
+                        showLoggedInMenu();
+                    })
+                            .fail(function (result) {
+                                showLoggedOutMenu();
+                            });
+                }
+                showMenu();
+
+                // logout the user
+                $(document).on('click', '#logout', function () {
+                    setCookie("jwt", "", 1);
+                });
+
+
+                function showUpdateAccountForm() {
                     // validate jwt to verify access
                     var jwt = getCookie('jwt');
                     $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
 
+                        // html form for updating user account will be here
+                        // if response is valid, put user details in the form
+                        $('#firstname').val(result.data.firstname);
+                        $('#lastname').val(result.data.lastname);
+                        $('#email').val(result.data.email);
+                        clearResponse();
                     })
-                            // show login page on error will be here
-                            // show login page on error
-                            .done(function (result) {
-                                window.location = "shop.php";
-                            });
+
+
                 }
 
-                redirectIfTokenValid();
-                clearResponse();
 
-                // clearResponse() will be here COMMON
-                function clearResponse() {
-                    $('#response').html('');
-                }
+                $(document).on('submit', '#update_account_form', function () {
 
-                // function to set cookie COMMON
-                function setCookie(cname, cvalue, exdays) {
-                    var d = new Date();
-                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-                    var expires = "expires=" + d.toUTCString();
-                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-                }
 
-                // trigger when login form is submitted
-                $(document).on('submit', '#login_form', function () {
+                    // handle for update_account_form
+                    var update_account_form = $(this);
+
+                    // validate jwt to verify access
+                    var jwt = getCookie('jwt');
+
+                    // get form data and jwt here
                     // get form data
-                    var login_form = $(this);
-                    var form_data = JSON.stringify(login_form.serializeObject());
+                    var update_account_form_obj = update_account_form.serializeObject();
+
+// add jwt on the object
+                    update_account_form_obj.jwt = jwt;
+
+// convert object to json string
+                    var form_data = JSON.stringify(update_account_form_obj);
+
+
 
                     $.ajax({
-                        url: "api/login.php",
+                        url: "api/update_user.php",
                         type: "POST",
                         contentType: 'application/json',
                         data: form_data,
                         success: function (result) {
 
-                            // store jwt to cookie
+                            $('#response').html("<div class='alert alert-success'>Account was updated.</div>");
+                            // store new jwt to coookie
                             setCookie("jwt", result.jwt, 1);
-
-                            // show home page & tell the user it was a successful login
-                            //showHomePage(); //try this in cart
-                            $('#response').html("<div class='alert alert-success'>Successful login.</div>");
-                            window.location = "shop.php";
-
-                        }, error: function (xhr, resp, text) {
-                            // on error, tell the user login has failed & empty the input boxes
-                            $('#response').html("<div class='alert alert-danger'>Login failed. Email or password is incorrect.</div>");
-                            login_form.find('input').val('');
+                        },
+                        // show error message to user
+                        error: function (xhr, resp, text) {
+                            if (xhr.responseJSON.message == "Unable to update user.") {
+                                $('#response').html("<div class='alert alert-danger'>Unable to update account.</div>");
+                            } else if (xhr.responseJSON.message == "Access denied.") {
+                                showLoginPage();
+                                $('#response').html("<div class='alert alert-success'>Access denied. Please login</div>");
+                            }
                         }
 
-                    });
 
+
+
+
+                    });
+=
                     return false;
                 });
 
-             
-            });
 
+
+
+            });
         </script>
-        
+
+        <script>
+            let formHasNoErrors = true;
+
+            function isPasswordValid()
+            {
+                document.getElementById("response").innerHTML = "";
+
+                let pattern = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[£!#€$%^&*]).{8,}/;
+
+                // test to see if the password is at least 8-digits long and contains an uppercase letter, a lowercase letter, a digit and one of these characters (£!#€$%^&*)
+                if (pattern.test(document.getElementById("password").value) === false)
+                {
+                    document.getElementById("response").innerHTML = "<div class='alert alert-danger'>Password must be at least 8-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*).</div>";
+                    return false;
+                }
+
+                return true;
+            }
+
+            function isFormValid()
+            {
+                let passwordIsValid = isPasswordValid();
+
+                if (passwordIsValid)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+        </script>
+
     </head>
 
     <body>
@@ -174,8 +262,10 @@
                         <ul class="site-menu js-clone-nav d-none d-md-block">
                             <li><a href="index.php">Home</a></li>
                             <li><a href="shop.php">Shop</a></li>
-                            <li><a href="register.html" id='register'>Register</a><li>
-                            <li><a href="login.html" id='login'>Login</a><li>
+                            <li id='register'><a href="register.html" >Register</a></li>
+                            <li id = 'login'><a href="login.html" >Login</a></li>
+                            <li id ='update_account'><a href="update_account.html" >Update Account</a></li>
+                            <li id ='logout'><a href="index.php" >Logout</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -190,29 +280,41 @@
             </div>
 
             <div class="site-section">
-                <div class="container" id="login_container">
+                <div class="container" id="update_account_container">
 
                     <div class="row mb-5">
-                        <div class="col-md-9 order-2" id="login_wrapper">
+                        <div class="col-md-9 order-2" id="update_account_wrapper">
 
                             <div class="row">
-                                
-                                <h2 id="login_heading">Login</h2>
-                                
+
+                                <h2 id="update_account_heading">Update Account</h2>
+
                                 <div id="response"></div>
-                            
-                                <form id='login_form' autocomplete = "on">
-                                    <div class='form-group'>
-                                        <label for='email'>Email Address</label>
-                                        <input type='email' class='form-control' id='email' name='email' placeholder='Enter email' required>
+
+                                <form id='update_account_form' onsubmit="return isFormValid()">
+                                    <div class="form-group">
+                                        <label for="firstname">First Name</label>
+                                        <input type="text" class="form-control" name="firstname" id="firstname" required value="" />
                                     </div>
 
-                                    <div class='form-group'>
-                                        <label for='password'>Password</label>
-                                        <input type='password' class='form-control' id='password' name='password' placeholder='Enter password' required>
+                                    <div class="form-group">
+                                        <label for="lastname">Last Name</label>
+                                        <input type="text" class="form-control" name="lastname" id="lastname" required value="" />
                                     </div>
 
-                                    <button id="login_button" type='submit' class='btn btn-primary'>Login</button>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" required value="" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" />
+                                    </div>
+
+                                    <button id="update_account_button" type='submit' class='btn btn-primary'>
+                                        Save Changes
+                                    </button>
                                 </form>
 
                             </div>

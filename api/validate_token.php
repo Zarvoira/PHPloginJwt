@@ -14,14 +14,12 @@ include_once 'libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once 'libs/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
  
-// retrieve gieve jwt here
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
  
 // get jwt
 $jwt=isset($data->jwt) ? $data->jwt : "";
  
-// decode jwt here
 // if jwt is not empty
 if($jwt){
  
@@ -50,11 +48,8 @@ if($jwt){
         "message" => "Access denied.",
         "error" => $e->getMessage()
     ));
+    }
 }
- 
-    // catch will be here
-}
-//
 else{
  
     // set response code

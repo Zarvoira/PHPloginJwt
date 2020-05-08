@@ -40,7 +40,6 @@
                 redirectIfTokenInvalid();
                 clearResponse();
 
-                // clearResponse() will be here COMMON
                 function clearResponse() {
                     $('#response').html('');
                 }
@@ -71,7 +70,7 @@
                     return "";
                 }
 
-                // function to make form values to json format  COMMON
+                // function to make form values to json format COMMON
                 $.fn.serializeObject = function () {
 
                     var o = {};
@@ -140,7 +139,6 @@
                     // validate jwt to verify access
                     var jwt = getCookie('jwt');
 
-                    // get form data and jwt here
                     // get form data
                     var update_account_form_obj = update_account_form.serializeObject();
 

@@ -18,7 +18,6 @@ class User {
         $this->conn = $db;
     }
 
-// create() method will be here
     // create new user record
     function create() {
 
@@ -56,8 +55,7 @@ class User {
         return false;
     }
 
-// emailExists() method will be here
-// check if given email exist in the database
+    // check if given email exist in the database
     function emailExists() {
 
         // query to check if email exists
@@ -101,8 +99,7 @@ class User {
         return false;
     }
 
-// update() method will be here
-// update a user record
+    // update a user record
     public function update() {
 
         // if password needs to be updated

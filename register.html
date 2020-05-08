@@ -46,7 +46,7 @@
                     return "";
                 }
 
-                // function to make form values to json format  COMMON
+                // function to make form values to json format COMMON
                 $.fn.serializeObject = function () {
 
                     var o = {};
@@ -64,7 +64,6 @@
                     return o;
                 };
 
-                //common
                 function redirectIfTokenValid()
                 {
                     // validate jwt to verify access
@@ -72,7 +71,6 @@
                     $.post("api/validate_token.php", JSON.stringify({jwt: jwt})).done(function (result) {
 
                     })
-                    // show login page on error will be here
                     // show login page on error
                     .done(function (result) {
                         window.location = "shop.php";
@@ -82,7 +80,6 @@
                 redirectIfTokenValid();
                 clearResponse();
 
-                // clearResponse() will be here COMMON
                 function clearResponse() {
                     $('#response').html('');
                 }

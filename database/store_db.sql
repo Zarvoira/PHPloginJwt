@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2019 at 05:36 AM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.10
+-- Generation Time: May 08, 2020 at 01:57 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -67,9 +67,7 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`id`, `p_id`, `ip_add`, `user_id`, `qty`) VALUES
 (22, 12, '127.0.0.1', -1, 102),
-(23, 7, '127.0.0.1', -1, 1),
-(25, 9, '::1', -1, 2),
-(32, 18, '::1', 3, 12);
+(23, 7, '127.0.0.1', -1, 1);
 
 -- --------------------------------------------------------
 
@@ -131,10 +129,36 @@ INSERT INTO `products` (`product_id`, `product_cat`, `product_title`, `product_p
 (7, 3, 'Tank Top', 1000, 100, 'test2', 'images/cloth_1.jpg', 'test'),
 (9, 3, 'Coo Outfit', 12345, 1000, 'nice outfit', 'images/men.jpg', ''),
 (12, 3, 'Shirt', 100, 100, '', 'images/man1.jpg', ''),
-(13, 2, 'Ladies Top', 29, 100, '', 'images/women1.jpg', ''),
-(16, 2, 'Jacket', 89, 100, '', 'images/women.jpg', ''),
-(17, 2, 'Dress', 20, 10, '', 'images/women3.jpg', ''),
-(18, 13, 'Kids Hoodie', 20, 100, '', 'images/kid3.jpg', '');
+(13, 2, 'women cloth', 29, 100, '', 'images/women1.jpg', ''),
+(16, 2, 'woman 4', 89, 100, '', 'images/women.jpg', ''),
+(17, 3, 'woman cloth 3', 20, 10, '', 'images/women3.jpg', ''),
+(19, 13, 'kid1', 100, 100, '', 'images/kid1.jpg', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `firstname` varchar(256) NOT NULL,
+  `lastname` varchar(256) NOT NULL,
+  `email` varchar(256) NOT NULL,
+  `password` varchar(2048) NOT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  `modified` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `created`, `modified`) VALUES
+(1, 'Banar', 'Agung', 'agung@gmail.com', '$2y$10$l99oLWO201CAvFNFQ8tDKODuwyuDcXN3SM.0phZ17TgsTDo3S5zqu', '2020-04-25 19:42:10', '2020-04-26 23:34:37'),
+(2, 'example1', 'example2', 'agungbanar@gmail.com', '$2y$10$A0mcvnfBjWafkL/uSsJi0uB0uidqEfR4CEEQ02lg7HWW0MIxOR4CS', '2020-04-26 23:58:30', '2020-04-26 23:58:30'),
+(3, 'aa', 'aa', 'a@a.com', '$2y$10$bvmg2SAEmeX4Ea.Kfssawe/qudh5aujv3TH119foAjl2mX6Dyst/a', '2020-05-05 01:55:36', '2020-05-05 01:55:36'),
+(7, 'tom', 'ford', 't@t.com', '$2y$10$KiNn.1nG0rT9xhBcsLkX0eaKp82T2Nz5mjy2O9KZaHRtY/dKEcGlK', '2020-05-05 12:46:41', '2020-05-07 20:59:57');
 
 -- --------------------------------------------------------
 
@@ -197,6 +221,12 @@ ALTER TABLE `products`
   ADD KEY `fk_product_cat` (`product_cat`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user_info`
 --
 ALTER TABLE `user_info`
@@ -216,7 +246,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -234,7 +264,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `product_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_info`

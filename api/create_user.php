@@ -16,7 +16,6 @@ $db = $database->getConnection();
  
 // instantiate product object
 $user = new User($db);
-// submitted data will be here
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -28,7 +27,6 @@ $user->email = $data->email;
 $email_exists = $user->emailExists();
 $user->password = $data->password;
  
-// use the create() method here
 // create the user
 if(
     !empty($user->firstname) &&
